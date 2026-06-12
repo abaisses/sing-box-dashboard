@@ -1,4 +1,4 @@
-import type { Client, Interceptor } from "@connectrpc/connect";
+import type { Client, Interceptor, Transport } from "@connectrpc/connect";
 import { createClient } from "@connectrpc/connect";
 import { createGrpcWebTransport } from "@connectrpc/connect-web";
 
@@ -101,13 +101,16 @@ export class DaemonApi {
 
   private logSequence = 0;
 
-  constructor(config: Server) {
+  constructor(config: Server, transport?: Transport) {
     this.config = config;
-    const transport = createGrpcWebTransport({
-      baseUrl: config.url,
-      interceptors: config.secret ? [authInterceptor(config.secret)] : [],
-    });
-    this.client = createClient(StartedService, transport);
+    this.client = createClient(
+      StartedService,
+      transport ??
+        createGrpcWebTransport({
+          baseUrl: config.url,
+          interceptors: config.secret ? [authInterceptor(config.secret)] : [],
+        }),
+    );
 
     this.serviceStatus = new StreamStore<ServiceStatusData>(
       () => ({ status: null }),
