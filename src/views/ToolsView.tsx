@@ -413,7 +413,7 @@ export function STUNTestView() {
                     value={
                       progress.natMapping > 0 ? (
                         <Badge tone={natMappingTone(progress.natMapping)}>
-                          {t(natMappingDescription(progress.natMapping))}
+                          {natMappingDescription(progress.natMapping)}
                         </Badge>
                       ) : running ? (
                         <Spinner />
@@ -427,7 +427,7 @@ export function STUNTestView() {
                     value={
                       progress.natFiltering > 0 ? (
                         <Badge tone={natFilteringTone(progress.natFiltering)}>
-                          {t(natFilteringDescription(progress.natFiltering))}
+                          {natFilteringDescription(progress.natFiltering)}
                         </Badge>
                       ) : running ? (
                         <Spinner />

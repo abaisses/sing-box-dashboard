@@ -1,7 +1,6 @@
 // Formatting mirrors the helpers sing-box graphical clients use
 // (libbox FormatBytes / FormatMemoryBytes / FormatBitrate / FormatDuration).
 
-import type { MessageKey } from "../app/translations";
 
 const BYTE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"];
 
@@ -140,7 +139,7 @@ export function proxyDisplayType(type: string): string {
   return PROXY_DISPLAY_TYPES[type] ?? type;
 }
 
-export function natMappingDescription(value: number): MessageKey {
+export function natMappingDescription(value: number): string {
   switch (value) {
     case 2:
       return "Endpoint Independent";
@@ -153,7 +152,7 @@ export function natMappingDescription(value: number): MessageKey {
   }
 }
 
-export function natFilteringDescription(value: number): MessageKey {
+export function natFilteringDescription(value: number): string {
   switch (value) {
     case 1:
       return "Endpoint Independent";

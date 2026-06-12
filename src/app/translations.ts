@@ -198,9 +198,6 @@ export const TRANSLATIONS = {
   "NAT mapping": { "zh-Hans": "NAT 映射", "zh-Hant": "NAT 映射", "fa": "نگاشت NAT", "ru": "NAT-отображение" },
   "NAT filtering": { "zh-Hans": "NAT 过滤", "zh-Hant": "NAT 過濾", "fa": "فیلتر NAT", "ru": "NAT-фильтрация" },
   "Binding...": { "zh-Hans": "正在绑定...", "zh-Hant": "正在綁定...", "fa": "در حال اتصال...", "ru": "Привязка..." },
-  "Endpoint Independent": { "zh-Hans": "端点无关", "zh-Hant": "端點無關", "fa": "مستقل از نقطه پایانی", "ru": "Не зависит от узла" },
-  "Address Dependent": { "zh-Hans": "地址相关", "zh-Hant": "地址相關", "fa": "وابسته به آدرس", "ru": "Зависит от адреса" },
-  "Address and Port Dependent": { "zh-Hans": "地址和端口相关", "zh-Hant": "地址和端口相關", "fa": "وابسته به آدرس و پورت", "ru": "Зависит от адреса и порта" },
   "Unknown": { "zh-Hans": "未知", "zh-Hant": "未知", "fa": "ناشناخته", "ru": "Неизвестно" },
 
   // tailscale
