@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { createServerId, normalizeServerUrl, type Server } from "../api/config";
 import { DaemonApi } from "../api/daemon";
+import type { ThemePreference } from "../app/context";
 import { LanguageSelect, useI18n, type Translate } from "../app/i18n";
 import { Icon } from "../components/Icon";
-import { Field, Spinner } from "../components/ui";
+import { Field, Spinner, ThemeSelect } from "../components/ui";
 
 const CONNECT_TIMEOUT_MS = 8000;
 
@@ -34,7 +35,11 @@ export function describeConnectMessage(message: string, t: Translate): string {
   return message;
 }
 
-export function SetupView(props: { onCreate: (server: Server) => void }) {
+export function SetupView(props: {
+  onCreate: (server: Server) => void;
+  theme: ThemePreference;
+  onThemeChange: (theme: ThemePreference) => void;
+}) {
   const { t } = useI18n();
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
@@ -97,7 +102,6 @@ export function SetupView(props: { onCreate: (server: Server) => void }) {
           sing-box
           <small>dashboard</small>
         </div>
-        <h1>{t("Add a server")}</h1>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -146,9 +150,12 @@ export function SetupView(props: { onCreate: (server: Server) => void }) {
             </button>
           </div>
         </form>
-        <div className="setup-language">
-          <Icon name="language" size={14} />
-          <LanguageSelect className="select inline" />
+        <div className="setup-footer">
+          <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
+          <div className="setup-footer-language">
+            <Icon name="language" size={14} />
+            <LanguageSelect className="select ghost" />
+          </div>
         </div>
       </div>
     </div>

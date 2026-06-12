@@ -114,6 +114,8 @@ export function App() {
             updateServers({ servers: [...serversState.servers, server], activeId: server.id });
             navigate("overview");
           }}
+          theme={theme}
+          onThemeChange={updateTheme}
         />
       ) : (
         <Shell

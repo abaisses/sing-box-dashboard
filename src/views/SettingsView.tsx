@@ -10,7 +10,7 @@ import {
 import type { ThemePreference } from "../app/context";
 import { LanguageSelect, useI18n } from "../app/i18n";
 import { Icon } from "../components/Icon";
-import { Dialog, Field } from "../components/ui";
+import { Dialog, Field, ThemeSelect } from "../components/ui";
 
 export function SettingsView(props: {
   serversState: ServersState;
@@ -68,24 +68,7 @@ export function SettingsView(props: {
         <h2 className="settings-section-title">{t("Preferences")}</h2>
         <div className="settings-row">
           <span className="settings-row-label">{t("Appearance")}</span>
-          <div className="icon-segmented">
-            {(
-              [
-                { value: "auto", icon: "brightness_auto", title: t("System") },
-                { value: "light", icon: "light_mode", title: t("Light") },
-                { value: "dark", icon: "dark_mode", title: t("Dark") },
-              ] as const
-            ).map((option) => (
-              <button
-                key={option.value}
-                title={option.title}
-                className={props.theme === option.value ? "active" : ""}
-                onClick={() => props.onThemeChange(option.value)}
-              >
-                <Icon name={option.icon} size={15} />
-              </button>
-            ))}
-          </div>
+          <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
         </div>
         <div className="settings-row">
           <span className="settings-row-label">{t("Language")}</span>

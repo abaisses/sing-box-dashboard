@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import type { DelayTone } from "../api/format";
+import type { ThemePreference } from "../app/context";
 import { useI18n } from "../app/i18n";
 import { Icon, type IconName } from "./Icon";
 
@@ -68,6 +69,35 @@ export function SegmentedControl(props: {
           }}
         >
           {option.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Shared between Settings preferences and the first-run setup screen.
+export function ThemeSelect(props: {
+  theme: ThemePreference;
+  onChange: (theme: ThemePreference) => void;
+}) {
+  const { t } = useI18n();
+  return (
+    <div className="icon-segmented">
+      {(
+        [
+          { value: "auto", icon: "brightness_auto", title: t("System") },
+          { value: "light", icon: "light_mode", title: t("Light") },
+          { value: "dark", icon: "dark_mode", title: t("Dark") },
+        ] as const
+      ).map((option) => (
+        <button
+          key={option.value}
+          type="button"
+          title={option.title}
+          className={props.theme === option.value ? "active" : ""}
+          onClick={() => props.onChange(option.value)}
+        >
+          <Icon name={option.icon} size={15} />
         </button>
       ))}
     </div>

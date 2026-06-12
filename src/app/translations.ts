@@ -39,7 +39,6 @@ export const TRANSLATIONS = {
   "Documentation": { "zh-Hans": "文档", "zh-Hant": "文檔", "fa": "مستندات", "ru": "Документация" },
 
   // setup / server form
-  "Add a server": { "zh-Hans": "添加服务器", "zh-Hant": "添加伺服器", "fa": "افزودن سرور", "ru": "Добавить сервер" },
   "Name": { "zh-Hans": "名称", "zh-Hant": "名稱", "fa": "نام", "ru": "Имя" },
   "URL": { "zh-Hans": "URL", "zh-Hant": "URL", "fa": "URL", "ru": "URL" },
   "Secret": { "zh-Hans": "密钥", "zh-Hant": "密鑰", "fa": "رمز", "ru": "Секрет" },
