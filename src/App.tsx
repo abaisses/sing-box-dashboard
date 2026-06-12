@@ -34,7 +34,7 @@ import { ConnectionsView } from "./views/ConnectionsView";
 import { GroupsView } from "./views/GroupsView";
 import { LogsView } from "./views/LogsView";
 import { OverviewView } from "./views/OverviewView";
-import { SettingsView } from "./views/SettingsView";
+import { ServersView, SettingsView } from "./views/SettingsView";
 import { SetupView } from "./views/SetupView";
 import { NetworkQualityView, STUNTestView, ToolsView } from "./views/ToolsView";
 import { TailscaleEndpointView } from "./views/TailscaleView";
@@ -50,7 +50,8 @@ export type Route =
   | { page: "tools/stun" }
   | { page: "tools/tailscale"; tag: string }
   | { page: "tools/tailscale/ssh"; tag: string; peerID: string; username: string; terminalType: string }
-  | { page: "settings" };
+  | { page: "settings" }
+  | { page: "settings/servers" };
 
 function routeFromHash(): Route {
   const hash = location.hash.replace(/^#\/?/, "");
@@ -87,7 +88,7 @@ function routeFromHash(): Route {
           return { page: "tools" };
       }
     case "settings":
-      return { page: "settings" };
+      return segments[1] === "servers" ? { page: "settings/servers" } : { page: "settings" };
     default:
       return { page: "overview" };
   }
@@ -328,7 +329,7 @@ function ShellContent(props: {
         {started && navItem("connections", t("Connections"), "swap_vert", route.page === "connections")}
         {navItem("logs", t("Logs"), "text_snippet", route.page === "logs")}
         {navItem("tools", t("Tools"), "terminal", route.page.startsWith("tools"))}
-        {navItem("settings", t("Settings"), "settings", route.page === "settings")}
+        {navItem("settings", t("Settings"), "settings", route.page.startsWith("settings"))}
         <ServerPicker
           serversState={props.serversState}
           onServersChange={props.onServersChange}
@@ -348,12 +349,14 @@ function ShellContent(props: {
         {route.page === "settings" && (
           <SettingsView
             serversState={props.serversState}
-            onServersChange={props.onServersChange}
             theme={props.theme}
             onThemeChange={props.onThemeChange}
             accent={props.accent}
             onAccentChange={props.onAccentChange}
           />
+        )}
+        {route.page === "settings/servers" && (
+          <ServersView serversState={props.serversState} onServersChange={props.onServersChange} />
         )}
       </main>
       <DeprecatedWarningsGate started={started} />
@@ -424,7 +427,7 @@ function ServerPicker(props: {
             className="menu-item"
             onClick={() => {
               setOpen(false);
-              navigate("settings");
+              navigate("settings/servers");
             }}
           >
             <span className="menu-check">

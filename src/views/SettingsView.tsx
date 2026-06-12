@@ -7,18 +7,69 @@ import {
   type Server,
   type ServersState,
 } from "../api/config";
-import { isAccentPreset, type AccentPreference, type ThemePreference } from "../app/context";
+import { isAccentPreset, navigate, type AccentPreference, type ThemePreference } from "../app/context";
 import { LanguageSelect, useI18n } from "../app/i18n";
 import { Icon } from "../components/Icon";
 import { ACCENT_TITLES, AccentSelect, Dialog, Field, ThemeSelect } from "../components/ui";
 
 export function SettingsView(props: {
   serversState: ServersState;
-  onServersChange: (state: ServersState) => void;
   theme: ThemePreference;
   onThemeChange: (theme: ThemePreference) => void;
   accent: AccentPreference;
   onAccentChange: (accent: AccentPreference) => void;
+}) {
+  const { t } = useI18n();
+  const { servers, activeId } = props.serversState;
+  const active = servers.find((server) => server.id === activeId) ?? servers[0];
+
+  return (
+    <div className="page">
+      <div className="page-header">
+        <h1 className="page-title">{t("Settings")}</h1>
+      </div>
+      <div className="settings-section">
+        <h2 className="settings-section-title">{t("Servers")}</h2>
+        <button className="settings-server-link" onClick={() => navigate("settings/servers")}>
+          <span className="settings-server-link-icon">
+            <Icon name="dns" size={17} />
+          </span>
+          <span className="settings-server-link-text">
+            <span className="server-row-name">{active ? serverDisplayName(active) : ""}</span>
+            <span className="server-row-url">{active?.url}</span>
+          </span>
+          {servers.length > 1 && (
+            <span className="settings-server-link-count">{servers.length}</span>
+          )}
+          <span className="settings-row-chevron">
+            <Icon name="keyboard_arrow_right" size={14} />
+          </span>
+        </button>
+      </div>
+      <div className="settings-section">
+        <h2 className="settings-section-title">{t("Preferences")}</h2>
+        <div className="settings-row">
+          <span className="settings-row-label">{t("Appearance")}</span>
+          <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
+        </div>
+        <div className="settings-row">
+          <span className="settings-row-label">{t("Theme")}</span>
+          <ThemeMenu accent={props.accent} onChange={props.onAccentChange} />
+        </div>
+        <div className="settings-row">
+          <span className="settings-row-label">{t("Language")}</span>
+          <LanguageSelect className="select inline" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Settings → Servers sub-page: pure management — rows open the edit
+// dialog; switching the active server stays with the sidebar picker.
+export function ServersView(props: {
+  serversState: ServersState;
+  onServersChange: (state: ServersState) => void;
 }) {
   const { t } = useI18n();
   const { servers, activeId } = props.serversState;
@@ -45,41 +96,33 @@ export function SettingsView(props: {
   return (
     <div className="page">
       <div className="page-header">
-        <h1 className="page-title">{t("Settings")}</h1>
+        <button className="back-button" onClick={() => navigate("settings")}>
+          <Icon name="arrow_back" size={15} />
+          {t("Settings")}
+        </button>
+        <h1 className="page-title">{t("Servers")}</h1>
       </div>
-      <div className="settings-section">
-        <div className="settings-section-header">
-          <h2 className="settings-section-title">{t("Servers")}</h2>
-          <button className="icon-button" title={t("Add server")} onClick={() => setEditing("new")}>
+      <div className="server-list">
+        <button className="server-item-add" onClick={() => setEditing("new")}>
+          <span className="server-item-icon">
             <Icon name="add" size={15} />
-          </button>
-        </div>
+          </span>
+          {t("Add server")}
+        </button>
         {servers.map((server) => (
-          <div className="settings-row" key={server.id}>
-            <button className="settings-row-main" onClick={() => setEditing(server)}>
+          <button className="server-item" key={server.id} onClick={() => setEditing(server)}>
+            <span className="server-item-icon">
+              <Icon name="dns" size={15} />
+            </span>
+            <span className="server-item-text">
               <span className="server-row-name">{serverDisplayName(server)}</span>
               <span className="server-row-url">{server.url}</span>
-              <span className="settings-row-chevron">
-                <Icon name="keyboard_arrow_right" size={14} />
-              </span>
-            </button>
-          </div>
+            </span>
+            <span className="settings-row-chevron">
+              <Icon name="keyboard_arrow_right" size={14} />
+            </span>
+          </button>
         ))}
-      </div>
-      <div className="settings-section">
-        <h2 className="settings-section-title">{t("Preferences")}</h2>
-        <div className="settings-row">
-          <span className="settings-row-label">{t("Appearance")}</span>
-          <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
-        </div>
-        <div className="settings-row">
-          <span className="settings-row-label">{t("Theme")}</span>
-          <ThemeMenu accent={props.accent} onChange={props.onAccentChange} />
-        </div>
-        <div className="settings-row">
-          <span className="settings-row-label">{t("Language")}</span>
-          <LanguageSelect className="select inline" />
-        </div>
       </div>
       {editing !== null && (
         <ServerDialog
