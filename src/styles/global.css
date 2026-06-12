@@ -1103,37 +1103,6 @@ a:hover {
   min-width: 130px;
 }
 
-/* Borderless variant that reads as plain text (setup footer). */
-.select.ghost {
-  width: auto;
-  min-width: 0;
-  height: 26px;
-  background-color: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  color: var(--text-secondary);
-  padding-inline-start: 4px;
-  padding-inline-end: 22px;
-  background-position: right 4px center;
-}
-
-[dir="rtl"] .select.ghost {
-  background-position: left 4px center;
-}
-
-.select.ghost:hover {
-  color: var(--text);
-}
-
-.select.ghost:focus {
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.select.ghost:focus-visible {
-  box-shadow: 0 0 0 3px var(--accent-soft);
-}
-
 .input::placeholder {
   color: var(--text-faint);
 }
@@ -1585,7 +1554,7 @@ a:hover {
   flex-shrink: 0;
 }
 
-/* Dropdown panel for the Theme row in Settings. */
+/* Dropdown panel for the Theme rows in Settings and the setup footer. */
 .menu.accent-menu {
   padding: 12px 13px;
 }
@@ -1632,22 +1601,25 @@ a:hover {
   text-transform: uppercase;
 }
 
-.setup-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 22px;
-  padding-top: 14px;
-  border-top: 1px solid var(--border);
-  color: var(--text-faint);
+/* The card's one primary action: full width, a touch taller than inline
+   controls. */
+.setup-submit {
+  width: 100%;
+  height: 36px;
+  margin-top: 10px;
+  font-size: 13.5px;
 }
 
-.setup-footer-language {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  min-width: 0;
+/* Preference rows borrowed from Settings; the panel's own border-top stands
+   in for the first divider, and the card edge closes the last row. */
+.setup-footer {
+  margin-top: 22px;
+  border-top: 1px solid var(--border);
+}
+
+.setup-footer .settings-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* ---------- connection error ---------- */

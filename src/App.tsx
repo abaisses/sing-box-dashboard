@@ -144,6 +144,8 @@ export function App() {
           }}
           theme={theme}
           onThemeChange={updateTheme}
+          accent={accent}
+          onAccentChange={updateAccent}
         />
       ) : (
         <Shell

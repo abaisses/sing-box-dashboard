@@ -168,6 +168,65 @@ export function AccentSelect(props: {
   );
 }
 
+// Accent dropdown for the Theme rows in Settings and the setup screen: the
+// preset swatch row plus the multicolor custom entry, in a menu like the
+// server picker's. Picking a preset closes the menu; the custom swatch keeps
+// it open while the browser's color panel (with its own hex field) is in use.
+export function ThemeMenu(props: {
+  accent: AccentPreference;
+  onChange: (accent: AccentPreference) => void;
+  openUp?: boolean;
+}) {
+  const { t } = useI18n();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const onPointerDown = (event: PointerEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  return (
+    <div className="menu-anchor" ref={ref}>
+      <button className="button" aria-expanded={open} onClick={() => setOpen(!open)}>
+        {isAccentPreset(props.accent) ? (
+          <>
+            <span className="accent-dot" data-accent={props.accent} />
+            {t(ACCENT_TITLES[props.accent])}
+          </>
+        ) : (
+          <>
+            <span className="accent-dot" style={{ background: props.accent }} />
+            {props.accent.toUpperCase()}
+          </>
+        )}
+        <Icon name="unfold_more" size={13} />
+      </button>
+      {open && (
+        <div className={props.openUp ? "menu open-up align-right accent-menu" : "menu align-right accent-menu"}>
+          <AccentSelect
+            accent={props.accent}
+            onChange={(accent) => {
+              props.onChange(accent);
+              if (isAccentPreset(accent)) {
+                setOpen(false);
+              }
+            }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Full-width segmented control that falls back to a select when the labels
 // no longer fit, mirroring ClashModeCard's tabsFit measurement.
 export function AdaptiveSegmented(props: {

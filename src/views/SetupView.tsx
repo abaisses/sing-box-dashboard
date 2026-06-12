@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from "react";
 
 import { createServerId, normalizeServerUrl, type Server } from "../api/config";
 import { DaemonApi } from "../api/daemon";
-import type { ThemePreference } from "../app/context";
+import type { AccentPreference, ThemePreference } from "../app/context";
 import { LanguageSelect, useI18n, type Translate } from "../app/i18n";
 import { Icon } from "../components/Icon";
-import { Field, Spinner, ThemeSelect } from "../components/ui";
+import { Field, Spinner, ThemeMenu, ThemeSelect } from "../components/ui";
 
 const CONNECT_TIMEOUT_MS = 8000;
 
@@ -39,6 +39,8 @@ export function SetupView(props: {
   onCreate: (server: Server) => void;
   theme: ThemePreference;
   onThemeChange: (theme: ThemePreference) => void;
+  accent: AccentPreference;
+  onAccentChange: (accent: AccentPreference) => void;
 }) {
   const { t } = useI18n();
   const [name, setName] = useState("");
@@ -143,18 +145,23 @@ export function SetupView(props: {
               <div>{error}</div>
             </div>
           )}
-          <div className="row-actions" style={{ marginTop: 6 }}>
-            <button className="button primary" type="submit" disabled={!valid || connecting}>
-              {connecting && <Spinner />}
-              {connecting ? t("Connecting...") : t("Connect")}
-            </button>
-          </div>
+          <button className="button primary setup-submit" type="submit" disabled={!valid || connecting}>
+            {connecting && <Spinner />}
+            {connecting ? t("Connecting...") : t("Connect")}
+          </button>
         </form>
         <div className="setup-footer">
-          <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
-          <div className="setup-footer-language">
-            <Icon name="language" size={14} />
-            <LanguageSelect className="select ghost" />
+          <div className="settings-row">
+            <span className="settings-row-label">{t("Appearance")}</span>
+            <ThemeSelect theme={props.theme} onChange={props.onThemeChange} />
+          </div>
+          <div className="settings-row">
+            <span className="settings-row-label">{t("Theme")}</span>
+            <ThemeMenu accent={props.accent} onChange={props.onAccentChange} openUp />
+          </div>
+          <div className="settings-row">
+            <span className="settings-row-label">{t("Language")}</span>
+            <LanguageSelect className="select inline" />
           </div>
         </div>
       </div>
