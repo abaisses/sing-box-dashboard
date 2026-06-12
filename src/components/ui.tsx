@@ -601,9 +601,8 @@ export function DetailShell(props: {
     return (
       <div className="page">
         <div className="page-header">
-          <button className="back-button" onClick={props.onClose}>
-            <Icon name="arrow_back" size={15} />
-            {props.backLabel}
+          <button className="back-button" aria-label={props.backLabel} onClick={props.onClose}>
+            <Icon name="arrow_back" size={20} />
           </button>
           <h1 className="page-title">{props.title}</h1>
           {props.accessory && <div className="actions">{props.accessory}</div>}

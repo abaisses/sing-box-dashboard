@@ -90,9 +90,8 @@ export function ServersView(props: {
   return (
     <div className="page">
       <div className="page-header">
-        <button className="back-button" onClick={() => navigate("settings")}>
-          <Icon name="arrow_back" size={15} />
-          {t("Settings")}
+        <button className="back-button" aria-label={t("Settings")} onClick={() => navigate("settings")}>
+          <Icon name="arrow_back" size={20} />
         </button>
         <h1 className="page-title">{t("Servers")}</h1>
       </div>

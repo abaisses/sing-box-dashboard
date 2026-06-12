@@ -97,9 +97,8 @@ export function ToolsPageHeader(props: { title: string }) {
   const { t } = useI18n();
   return (
     <div className="page-header">
-      <button className="back-button" onClick={() => navigate("tools")}>
-        <Icon name="arrow_back" size={15} />
-        {t("Tools")}
+      <button className="back-button" aria-label={t("Tools")} onClick={() => navigate("tools")}>
+        <Icon name="arrow_back" size={20} />
       </button>
       <h1 className="page-title">{props.title}</h1>
     </div>
