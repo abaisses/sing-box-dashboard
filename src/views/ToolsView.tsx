@@ -52,8 +52,6 @@ export function ToolsView() {
   );
 }
 
-// Tailscale lives under Tools as an "Endpoints" section, mirroring the macOS
-// app; it appears only while the running configuration has endpoints.
 function TailscaleEndpointRows() {
   const api = useApi();
   const { t } = useI18n();

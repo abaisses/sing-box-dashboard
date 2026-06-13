@@ -1,11 +1,3 @@
-// Shared between the Tailscale endpoint view and the terminal views.
-//
-// Mirrors the SharedPreferences.tailscaleSSHRemembered* storage in
-// sing-box-for-apple: username and terminal type are always kept for
-// prefilling the prompt; `remember` additionally makes Connect skip the
-// prompt entirely (quick connect) and lists the peer in the terminal
-// session manager's New Session menu.
-
 import type { TailscaleEndpointStatus, TailscalePeer } from "../gen/daemon/started_service_pb";
 
 import { loadStoredJson, saveStoredJson } from "./storage";

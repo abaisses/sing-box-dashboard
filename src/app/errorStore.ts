@@ -2,12 +2,6 @@ import { useSyncExternalStore } from "react";
 
 import { describeError } from "../api/stream";
 
-// Failure queue for fire-and-forget mutations (close connection, clear logs,
-// log out, ...) whose rejections would otherwise be invisible. A module-level
-// store in the StreamStore style so call sites can `.catch(showError)`
-// without threading a context through; App presents the queue head in a
-// dialog (GlobalErrorDialog) one error at a time.
-
 let queue: string[] = [];
 const listeners = new Set<() => void>();
 

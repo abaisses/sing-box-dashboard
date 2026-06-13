@@ -6,7 +6,6 @@ export type { Language, MessageKey };
 
 export type LanguagePreference = "auto" | Language;
 
-// Mirrored by the pre-paint script in index.html (language detection + dir).
 const LANGUAGE_KEY = "sing-box-dashboard.language";
 
 export function loadLanguagePreference(): LanguagePreference {
@@ -29,7 +28,6 @@ export function detectSystemLanguage(): Language {
   for (const tag of navigator.languages ?? [navigator.language]) {
     const lower = tag.toLowerCase();
     if (lower.startsWith("zh")) {
-      // Script subtag wins; otherwise infer it from the region as CLDR does.
       if (/hant|tw|hk|mo/.test(lower)) {
         return "zh-Hant";
       }
@@ -73,7 +71,6 @@ function translate(language: Language, key: MessageKey, params?: TranslateParams
   if (typeof entry === "string") {
     text = entry;
   } else {
-    // Plural-aware translations pick their form from the {count} parameter.
     const count = typeof params?.count === "number" ? params.count : null;
     text = (count !== null ? entry[pluralRules(language).select(count)] : undefined) ?? entry.other;
   }
@@ -136,9 +133,6 @@ export function I18nProvider(props: { children: ReactNode }) {
   return <I18nContext.Provider value={value}>{props.children}</I18nContext.Provider>;
 }
 
-// Shared between Settings preferences and the first-run setup screen; the
-// "auto" entry is labelled in the active language, the languages themselves
-// in their own.
 export function LanguageSelect(props: { className?: string }) {
   const { t, preference, setPreference } = useI18n();
   return (

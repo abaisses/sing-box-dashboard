@@ -1,13 +1,6 @@
-// UI string catalog. Keys are the English source strings (xcstrings-style);
-// the supported language list matches sing-box-for-apple, and translations
-// reuse its Localizable.xcstrings wording wherever the same string exists.
-
 export type Language = "en" | "zh-Hans" | "zh-Hant" | "fa" | "ru";
 export type TranslatedLanguage = Exclude<Language, "en">;
 
-// A translation whose wording varies with the {count} parameter, keyed by
-// the CLDR plural categories Intl.PluralRules reports for the language;
-// "other" is the required fallback (also used when no count is passed).
 export type PluralForms = Partial<Record<Intl.LDMLPluralRule, string>> & { other: string };
 
 export const LANGUAGES: { value: Language; label: string }[] = [
@@ -19,7 +12,6 @@ export const LANGUAGES: { value: Language; label: string }[] = [
 ];
 
 export const TRANSLATIONS = {
-  // navigation
   "Overview": { "zh-Hans": "概述", "zh-Hant": "概述", "fa": "نمای کلی", "ru": "Обзор" },
   "Groups": { "zh-Hans": "组", "zh-Hant": "組", "fa": "گروه‌ها", "ru": "Группы" },
   "Connections": { "zh-Hans": "连接", "zh-Hant": "連接", "fa": "اتصال‌ها", "ru": "Подключения" },
@@ -29,12 +21,10 @@ export const TRANSLATIONS = {
   "Toggle navigation": { "zh-Hans": "切换导航", "zh-Hant": "切換導航", "fa": "تغییر وضعیت ناوبری", "ru": "Показать или скрыть навигацию" },
   "Manage servers...": { "zh-Hans": "管理服务器...", "zh-Hant": "管理伺服器...", "fa": "مدیریت سرورها...", "ru": "Управление серверами..." },
 
-  // deprecated warnings
   "Deprecated Warning": { "zh-Hans": "弃用警告", "zh-Hant": "棄用警告", "fa": "هشدارهای منسوخ‌شدن", "ru": "Предупреждение об устаревании" },
   "Ok": { "zh-Hans": "好", "zh-Hant": "好", "fa": "باشه", "ru": "ОК" },
   "Documentation": { "zh-Hans": "文档", "zh-Hant": "文檔", "fa": "مستندات", "ru": "Документация" },
 
-  // setup / server form
   "Name": { "zh-Hans": "名称", "zh-Hant": "名稱", "fa": "نام", "ru": "Имя" },
   "URL": { "zh-Hans": "URL", "zh-Hant": "URL", "fa": "URL", "ru": "URL" },
   "Secret": { "zh-Hans": "密钥", "zh-Hant": "密鑰", "fa": "رمز", "ru": "Секрет" },
@@ -44,8 +34,6 @@ export const TRANSLATIONS = {
   "Connecting...": { "zh-Hans": "连接中...", "zh-Hant": "連接中...", "fa": "در حال اتصال...", "ru": "Подключение..." },
   "Connection timed out after {seconds} seconds": { "zh-Hans": "连接超时（{seconds} 秒）", "zh-Hant": "連接超時（{seconds} 秒）", "fa": "اتصال پس از {seconds} ثانیه منقضی شد", "ru": "Время ожидания подключения истекло ({seconds} с)" },
   "Stream ended without a status message": { "zh-Hans": "流在未收到状态消息的情况下结束", "zh-Hant": "流在未收到狀態消息的情況下結束", "fa": "جریان بدون پیام وضعیت پایان یافت", "ru": "Поток завершился без сообщения о состоянии" },
-  // Conclusions of the connectivity probe (lib/connectivity.ts), appended
-  // to the browser's opaque network error.
   "The browser is offline; check your network connection.": {
     "zh-Hans": "浏览器处于离线状态；请检查网络连接。",
     "zh-Hant": "瀏覽器處於離線狀態；請檢查網路連接。",
@@ -77,7 +65,6 @@ export const TRANSLATIONS = {
     "ru": "Сервер недоступен; проверьте, что адрес верен и служба запущена.",
   },
 
-  // settings
   "Servers": { "zh-Hans": "服务器", "zh-Hant": "伺服器", "fa": "سرورها", "ru": "Серверы" },
   "Add server": { "zh-Hans": "添加服务器", "zh-Hant": "添加伺服器", "fa": "افزودن سرور", "ru": "Добавить сервер" },
   "Preferences": { "zh-Hans": "偏好设置", "zh-Hant": "偏好設置", "fa": "ترجیحات", "ru": "Параметры" },
@@ -89,7 +76,6 @@ export const TRANSLATIONS = {
   "Dark": { "zh-Hans": "深色", "zh-Hant": "深色", "fa": "تیره", "ru": "Тёмная" },
   "Theme": { "zh-Hans": "主题", "zh-Hant": "主題", "fa": "تم", "ru": "Тема" },
   "Custom color": { "zh-Hans": "自定义颜色", "zh-Hant": "自定義顏色", "fa": "رنگ سفارشی", "ru": "Свой цвет" },
-  // "Default" is shared with the log-level picker; see the logs section.
   "Blue": { "zh-Hans": "蓝色", "zh-Hant": "藍色", "fa": "آبی", "ru": "Синий" },
   "Purple": { "zh-Hans": "紫色", "zh-Hant": "紫色", "fa": "بنفش", "ru": "Фиолетовый" },
   "Pink": { "zh-Hans": "粉色", "zh-Hant": "粉紅色", "fa": "صورتی", "ru": "Розовый" },
@@ -105,13 +91,11 @@ export const TRANSLATIONS = {
   "Cancel": { "zh-Hans": "取消", "zh-Hant": "取消", "fa": "لغو", "ru": "Отмена" },
   "Save": { "zh-Hans": "保存", "zh-Hant": "保存", "fa": "ذخیره", "ru": "Сохранить" },
 
-  // connection error takeover
   "Connection failed": { "zh-Hans": "连接失败", "zh-Hant": "連接失敗", "fa": "اتصال ناموفق بود", "ru": "Сбой подключения" },
   "Reconnecting...": { "zh-Hans": "重新连接中...", "zh-Hant": "重新連接中...", "fa": "در حال اتصال مجدد...", "ru": "Переподключение..." },
   "Retry": { "zh-Hans": "重试", "zh-Hant": "重試", "fa": "تلاش مجدد", "ru": "Повторить" },
   "Switch to another server": { "zh-Hans": "切换到其他服务器", "zh-Hant": "切換到其他伺服器", "fa": "رفتن به سرور دیگر", "ru": "Переключиться на другой сервер" },
 
-  // overview
   "Dashboard Items": { "zh-Hans": "仪表项目", "zh-Hant": "儀表項目", "fa": "موارد داشبورد", "ru": "Элементы панели" },
   "Service starting...": { "zh-Hans": "服务启动中...", "zh-Hant": "服務啟動中...", "fa": "سرویس در حال شروع است...", "ru": "Служба запускается..." },
   "Service stopping...": { "zh-Hans": "服务停止中...", "zh-Hant": "服務停止中...", "fa": "سرویس در حال توقف است...", "ru": "Служба останавливается..." },
@@ -130,7 +114,6 @@ export const TRANSLATIONS = {
   "Reset": { "zh-Hans": "重置", "zh-Hant": "重置", "fa": "بازنشانی", "ru": "Сброс" },
   "Done": { "zh-Hans": "完成", "zh-Hant": "完成", "fa": "انجام شد", "ru": "Готово" },
 
-  // stream banner
   "Failed to subscribe to {subject}: {error}": { "zh-Hans": "订阅{subject}失败：{error}", "zh-Hant": "訂閱{subject}失敗：{error}", "fa": "اشتراک در {subject} ناموفق بود: {error}", "ru": "Не удалось подписаться на {subject}: {error}" },
   "Check the server address and secret in Settings.": { "zh-Hans": "请检查设置中的服务器地址和密钥。", "zh-Hant": "請檢查設置中的伺服器地址和密鑰。", "fa": "آدرس سرور و رمز را در تنظیمات بررسی کنید.", "ru": "Проверьте адрес сервера и секрет в настройках." },
   "service status": { "zh-Hans": "服务状态", "zh-Hant": "服務狀態", "fa": "وضعیت سرویس", "ru": "состояние службы" },
@@ -139,14 +122,12 @@ export const TRANSLATIONS = {
   "logs": { "zh-Hans": "日志", "zh-Hant": "日誌", "fa": "گزارش", "ru": "журнал" },
   "Tailscale status": { "zh-Hans": "Tailscale 状态", "zh-Hant": "Tailscale 狀態", "fa": "وضعیت Tailscale", "ru": "состояние Tailscale" },
 
-  // groups
   "Empty groups": { "zh-Hans": "无分组", "zh-Hant": "無分組", "fa": "بدون گروه", "ru": "Нет групп" },
   "Loading...": { "zh-Hans": "加载中...", "zh-Hant": "加載中...", "fa": "در حال بارگذاری...", "ru": "Загрузка..." },
   "URL test": { "zh-Hans": "URL 测试", "zh-Hant": "URL 測試", "fa": "تست URL", "ru": "URL-тест" },
   "Expand": { "zh-Hans": "展开", "zh-Hant": "展開", "fa": "گسترش", "ru": "Развернуть" },
   "Collapse": { "zh-Hans": "收起", "zh-Hant": "收起", "fa": "جمع کردن", "ru": "Свернуть" },
 
-  // connections
   "Active": { "zh-Hans": "活动", "zh-Hant": "活動", "fa": "فعال", "ru": "Активно" },
   "Closed": { "zh-Hans": "已关闭", "zh-Hant": "已關閉", "fa": "بسته‌شده", "ru": "Закрыто" },
   "All": { "zh-Hans": "全部", "zh-Hant": "全部", "fa": "همه", "ru": "Все" },
@@ -187,7 +168,6 @@ export const TRANSLATIONS = {
   "Process": { "zh-Hans": "进程", "zh-Hant": "進程", "fa": "فرایند", "ru": "Процесс" },
   "Close connection": { "zh-Hans": "关闭连接", "zh-Hant": "關閉連接", "fa": "بستن اتصال", "ru": "Закрыть подключение" },
 
-  // logs
   "Error": { "zh-Hans": "错误", "zh-Hant": "錯誤", "fa": "خطا", "ru": "Ошибка" },
   "Warn": { "zh-Hans": "警告", "zh-Hant": "警告", "fa": "هشدار", "ru": "Предупреждение" },
   "Info": { "zh-Hans": "信息", "zh-Hant": "信息", "fa": "اطلاعات", "ru": "Информация" },
@@ -203,7 +183,6 @@ export const TRANSLATIONS = {
   "Clear Logs": { "zh-Hans": "清除日志", "zh-Hant": "清除日誌", "fa": "پاک کردن گزارش", "ru": "Очистить журнал" },
   "Empty logs": { "zh-Hans": "无日志", "zh-Hant": "無日誌", "fa": "بدون گزارش", "ru": "Нет журналов" },
 
-  // tools
   "Endpoints": { "zh-Hans": "端点", "zh-Hant": "端點", "fa": "نقاط اتصال", "ru": "Точки подключения" },
   "Tailscale: {tag}": { "zh-Hans": "Tailscale: {tag}", "zh-Hant": "Tailscale: {tag}", "fa": "Tailscale: {tag}", "ru": "Tailscale: {tag}" },
   "Network Quality": { "zh-Hans": "网络质量", "zh-Hant": "網路品質", "fa": "کیفیت شبکه", "ru": "Качество сети" },
@@ -233,7 +212,6 @@ export const TRANSLATIONS = {
   "Binding...": { "zh-Hans": "正在绑定...", "zh-Hant": "正在綁定...", "fa": "در حال اتصال...", "ru": "Привязка..." },
   "Unknown": { "zh-Hans": "未知", "zh-Hant": "未知", "fa": "ناشناخته", "ru": "Неизвестно" },
 
-  // tailscale
   "Endpoint not found": { "zh-Hans": "未找到端点", "zh-Hant": "未找到端點", "fa": "نقطه اتصال یافت نشد", "ru": "Точка подключения не найдена" },
   "Connected": { "zh-Hans": "已连接", "zh-Hant": "已連線", "fa": "متصل", "ru": "Подключено" },
   "Not connected": { "zh-Hans": "未连接", "zh-Hant": "未連線", "fa": "متصل نیست", "ru": "Не подключено" },
@@ -274,7 +252,6 @@ export const TRANSLATIONS = {
   "Edit": { "zh-Hans": "编辑", "zh-Hant": "編輯", "fa": "ویرایش", "ru": "Изменить" },
   "Peer not found": { "zh-Hans": "未找到设备", "zh-Hant": "未找到裝置", "fa": "همتا یافت نشد", "ru": "Узел не найден" },
 
-  // ssh terminal
   "New Session": { "zh-Hans": "新建会话", "zh-Hant": "新建工作階段", "fa": "جلسه جدید", "ru": "Новая сессия" },
   "Close": { "zh-Hans": "关闭", "zh-Hant": "關閉", "fa": "بستن", "ru": "Закрыть" },
   "Session closed": { "zh-Hans": "会话已关闭", "zh-Hant": "會話已關閉", "fa": "نشست بسته شد", "ru": "Сессия закрыта" },
@@ -282,7 +259,6 @@ export const TRANSLATIONS = {
   "(signal {signal})": { "zh-Hans": "（信号 {signal}）", "zh-Hant": "（信號 {signal}）", "fa": "(سیگنال {signal})", "ru": "(сигнал {signal})" },
   "Stream ended with status {code}": { "zh-Hans": "流已结束，状态 {code}", "zh-Hant": "流已結束，狀態 {code}", "fa": "جریان با وضعیت {code} پایان یافت", "ru": "Поток завершился со статусом {code}" },
 
-  // shared chrome
   "Others": { "zh-Hans": "其他", "zh-Hant": "其他", "fa": "سایر", "ru": "Другое" },
   "Copy": { "zh-Hans": "复制", "zh-Hant": "複製", "fa": "کپی", "ru": "Копировать" },
 } as const satisfies Record<string, Record<TranslatedLanguage, string | PluralForms>>;

@@ -25,7 +25,6 @@ export function navigate(path: string) {
   location.hash = `#/${path}`;
 }
 
-// Must stay in sync with the mobile breakpoint in global.css.
 const MOBILE_QUERY = "(max-width: 720px)";
 
 export function useIsMobile(): boolean {
@@ -61,9 +60,6 @@ export function applyTheme(preference: ThemePreference) {
     (preference === "auto" && window.matchMedia("(prefers-color-scheme: dark)").matches);
   document.documentElement.dataset.theme = dark ? "dark" : "light";
 
-  // Keep theme-color in sync with the topbar surface for browsers that use
-  // it (Chrome, Safari 15–18). Update both per-scheme metas so an explicit
-  // preference wins over the media query the browser matched against.
   const surface = getComputedStyle(document.documentElement).getPropertyValue("--surface").trim();
   if (surface) {
     document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
@@ -96,8 +92,6 @@ export function applyTheme(preference: ThemePreference) {
   }
 }
 
-// The macOS accent palette, in System Settings order; "default" is the
-// dashboard's monochrome accent (the slot Multicolor occupies on macOS).
 export const ACCENT_PRESETS = [
   "default",
   "blue",
@@ -112,15 +106,12 @@ export const ACCENT_PRESETS = [
 
 export type AccentPreset = (typeof ACCENT_PRESETS)[number];
 
-// Either a preset name or a custom "#rrggbb" color from the theme dialog.
 export type AccentPreference = AccentPreset | (string & {});
 
 export function isAccentPreset(value: string): value is AccentPreset {
   return (ACCENT_PRESETS as readonly string[]).includes(value);
 }
 
-// Accepts "#rgb" / "#rrggbb" (case-insensitive, "#" optional) and returns
-// the canonical lowercase "#rrggbb", or null when it is not a hex color.
 export function normalizeAccentColor(value: string): string | null {
   const hex = value.trim().replace(/^#/, "").toLowerCase();
   if (/^[0-9a-f]{3}$/.test(hex)) {
@@ -132,7 +123,6 @@ export function normalizeAccentColor(value: string): string | null {
   return null;
 }
 
-// Mirrored by the pre-paint script in index.html.
 const ACCENT_KEY = "sing-box-dashboard.accent";
 
 export function loadAccentPreference(): AccentPreference {
@@ -161,18 +151,12 @@ export function applyAccent(preference: AccentPreference) {
     root.style.removeProperty("--custom-accent");
     root.style.removeProperty("--on-accent");
   } else {
-    // Custom color: the derived tones (--accent-strong/-soft) come from
-    // color-mix in the [data-accent="custom"] rules, so they track theme
-    // switches without re-running this; only the luminance-dependent text
-    // color has to be computed here.
     root.dataset.accent = "custom";
     root.style.setProperty("--custom-accent", preference);
     root.style.setProperty("--on-accent", accentTextColor(preference));
   }
 }
 
-// Dark text on light accents, white on dark ones — the same flip macOS does
-// for its yellow accent. Mirrored by the pre-paint script in index.html.
 function accentTextColor(color: string): string {
   const channel = (i: number) => {
     const c = parseInt(color.slice(1 + i * 2, 3 + i * 2), 16) / 255;

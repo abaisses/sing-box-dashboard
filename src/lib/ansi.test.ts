@@ -32,7 +32,6 @@ describe("stripAnsi", () => {
   });
 
   it("is reentrant despite the shared global regex", () => {
-    // A stateful lastIndex would make back-to-back calls miss matches.
     expect(stripAnsi("\x1b[31ma")).toBe("a");
     expect(stripAnsi("\x1b[31mb")).toBe("b");
   });
@@ -61,7 +60,6 @@ describe("ansiColorCss", () => {
     const css = ansiColorCss([10, 10, 10], [0, 0, 0]);
     const match = /^rgb\((\d+),(\d+),(\d+)\)$/.exec(css);
     expect(match).not.toBeNull();
-    // On a black background the color must have been lightened.
     expect(Number(match![1])).toBeGreaterThan(10);
   });
 });

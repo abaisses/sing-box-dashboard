@@ -1,15 +1,7 @@
-// Formatting mirrors the helpers sing-box graphical clients use
-// (libbox FormatBytes / FormatMemoryBytes / FormatBitrate / FormatDuration).
-
-
-// Scheme check for links received from the daemon (deprecation migration
-// links, Tailscale auth URLs): the daemon is trusted, but a compromised
-// config must not be able to smuggle javascript: URLs into clickable anchors.
 export function isHttpUrl(value: string): boolean {
   return /^https?:\/\//i.test(value);
 }
 
-// Two-digit clock/date component, shared with the log file timestamp.
 export function pad2(value: number): string {
   return String(value).padStart(2, "0");
 }
@@ -104,7 +96,6 @@ export function formatRelativeTime(timestampMs: number, nowMs: number, locale?: 
   return formatter.format(Math.round(deltaSeconds / 86400), "day");
 }
 
-// Delay chip thresholds shared with the sing-box graphical clients.
 export type DelayTone = "neutral" | "good" | "medium" | "bad";
 
 export function urlTestDelayTone(delay: number): DelayTone {

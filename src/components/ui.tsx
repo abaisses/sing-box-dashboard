@@ -60,10 +60,6 @@ export function EmptyState(props: { icon?: IconName; children: ReactNode }) {
   );
 }
 
-// Chevron row of the Tools and Settings menu pages; `detail` is the trailing
-// secondary value (e.g. the active server name), like a SwiftUI NavigationLink.
-// With `href` it becomes an external link, trading the chevron for the
-// open-in-new glyph.
 export function NavRow(props: {
   icon: IconName;
   title: string;
@@ -119,7 +115,6 @@ export function SegmentedControl(props: {
   );
 }
 
-// Shared between Settings preferences and the first-run setup screen.
 export function ThemeSelect(props: {
   theme: ThemePreference;
   onChange: (theme: ThemePreference) => void;
@@ -160,19 +155,12 @@ export const ACCENT_TITLES: Record<AccentPreset, MessageKey> = {
   graphite: "Graphite",
 };
 
-// Accent swatch row mirroring the macOS System Settings picker. Each preset
-// button carries data-accent, so the global palette rules color it directly.
-// The trailing multicolor swatch hosts an invisible native color input — the
-// browser's picker brings its own palette and hex entry, so a custom color
-// needs no extra UI.
 export function AccentSelect(props: {
   accent: AccentPreference;
   onChange: (accent: AccentPreference) => void;
 }) {
   const { t } = useI18n();
   const custom = isAccentPreset(props.accent) ? null : props.accent;
-  // Seed the picker with the resolved accent so it opens on the current
-  // color even while a preset is selected.
   const wellValue =
     custom ??
     (getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#1a1a1a");
@@ -204,10 +192,6 @@ export function AccentSelect(props: {
   );
 }
 
-// Accent dropdown for the Theme rows in Settings and the setup screen: the
-// preset swatch row plus the multicolor custom entry, in a menu like the
-// server picker's. Picking a preset closes the menu; the custom swatch keeps
-// it open while the browser's color panel (with its own hex field) is in use.
 export function ThemeMenu(props: {
   accent: AccentPreference;
   onChange: (accent: AccentPreference) => void;
@@ -251,8 +235,6 @@ export function ThemeMenu(props: {
   );
 }
 
-// Full-width segmented control that falls back to a select when the labels
-// no longer fit, mirroring ClashModeCard's tabsFit measurement.
 export function AdaptiveSegmented(props: {
   options: { value: string; label: string }[];
   value: string;
@@ -322,9 +304,6 @@ export function AdaptiveSegmented(props: {
   );
 }
 
-// "Others" overflow menu, mirroring the ellipsis-circle toolbar menu in
-// sing-box-for-apple's LogView/ConnectionListView. Picker groups become
-// labelled radio sections; any item click closes the menu.
 export function OthersMenu(props: { children: ReactNode; icon?: IconName }) {
   const { t } = useI18n();
   const [open, setOpen] = useState(false);
@@ -349,8 +328,6 @@ export function OthersMenu(props: { children: ReactNode; icon?: IconName }) {
   );
 }
 
-// Sibling submenus share this so opening one closes the other; mounted inside
-// the conditional render above so the state resets whenever the menu reopens.
 const SubMenuGroupContext = createContext<{
   openId: string | null;
   setOpenId: (id: string | null) => void;
@@ -369,9 +346,6 @@ export function MenuLabel(props: { children: ReactNode }) {
   return <div className="menu-label">{props.children}</div>;
 }
 
-// Nested flyout matching the UIMenu submenus in sing-box-for-apple's LogView
-// (Log Level / Save). Opens on hover for mouse, on tap for touch; selecting a
-// nested item bubbles up to OthersMenu and closes the whole menu.
 export function SubMenu(props: { label: ReactNode; icon?: IconName; children: ReactNode }) {
   const id = useId();
   const group = useContext(SubMenuGroupContext);
@@ -463,7 +437,6 @@ export function Field(props: { label: ReactNode; children: ReactNode }) {
   );
 }
 
-// Shared by the connections, logs, and Tailscale peer list filters.
 export function SearchInput(props: { value: string; onChange: (value: string) => void }) {
   const { t } = useI18n();
   return (
@@ -542,9 +515,6 @@ export function QRCode(props: { value: string }) {
   );
 }
 
-// Dialog and Drawer render as native <dialog> elements: showModal provides
-// the focus trap, Escape handling (the cancel event), and top-layer stacking
-// the old hand-rolled overlays lacked. Both are mounted only while open.
 function useShowModal() {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -552,23 +522,18 @@ function useShowModal() {
     if (!dialog) {
       return;
     }
-    // showModal moves focus to the first focusable element; if React's
-    // autoFocus already landed on a specific field (e.g. the URL input in
-    // the server dialog), put it back.
     const focused = document.activeElement;
     dialog.showModal();
     if (focused instanceof HTMLElement && dialog.contains(focused)) {
       focused.focus();
     }
-    // close() (rather than plain removal) restores focus to the opener.
     return () => dialog.close();
   }, []);
   return ref;
 }
 
-// A click that lands on the ::backdrop targets the dialog element itself
-// with coordinates outside its box — clicks on the dialog's own padding
-// also target it, so the coordinate check tells them apart.
+// A click on the ::backdrop has the dialog element as its target, at
+// coordinates outside the dialog's box; clicks on its own padding target it too.
 function closeOnBackdropClick(event: React.MouseEvent<HTMLDialogElement>, onClose: () => void) {
   if (event.target !== event.currentTarget) {
     return;
@@ -618,9 +583,6 @@ export function Dialog(props: { onClose: () => void; className?: string; childre
   );
 }
 
-// Detail presentation shared by the connection and Tailscale peer details:
-// a side drawer over the list on desktop, a pushed full page with a back
-// button on mobile (like the Tools sub-pages).
 export function DetailShell(props: {
   backLabel: string;
   title: ReactNode;

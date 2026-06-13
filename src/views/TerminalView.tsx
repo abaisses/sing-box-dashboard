@@ -26,9 +26,6 @@ import {
   type SSHSessionOptions,
 } from "../lib/tailscaleSSH";
 
-// SSH session window as a routed page: on desktop it lives in a dedicated
-// popup browser window (mirroring the separate terminal window on macOS),
-// resolved from the URL alone so it survives a reload on its own.
 export function TailscaleSSHView(props: {
   tag: string;
   peerID: string;
@@ -43,9 +40,6 @@ export function TailscaleSSHView(props: {
   const endpoint = tailscale.data.endpoints.find((entry) => entry.endpointTag === props.tag);
   const peer = allPeers(endpoint).find((entry) => entry.stableID === props.peerID);
 
-  // Latch the session options from the first status delivery: later stream
-  // updates (peers flapping online/offline) must not tear down the live
-  // terminal.
   useEffect(() => {
     if (initialSession || !peer) {
       return;
@@ -75,8 +69,6 @@ export function TailscaleSSHView(props: {
   );
 }
 
-// Mobile counterpart of the popup window: a full-screen overlay above the
-// dashboard, like the full-screen terminal sheet on iOS.
 export function TerminalOverlay(props: {
   tag: string;
   initialSession: SSHSessionOptions;
@@ -98,9 +90,6 @@ export function TerminalOverlay(props: {
 interface ManagedSession {
   id: number;
   options: SSHSessionOptions;
-  // Remote title reported via OSC escape sequences; empty until the shell
-  // sets one, then it replaces user@host, like the Ghostty title on Apple
-  // platforms.
   title: string;
   statusLine: string | null;
 }
@@ -110,12 +99,6 @@ function sessionDisplayTitle(session: ManagedSession): string {
   return remote !== "" ? remote : `${session.options.username}@${session.options.peerName}`;
 }
 
-// Multi-session terminal with the session manager menu, mirroring
-// TerminalSessionManager/TerminalSessionMenuButton in sing-box-for-apple:
-// New Session duplicates the active one or opens any other remembered peer;
-// the list below switches between live sessions. Sessions that exit cleanly
-// close themselves after a second; when the last one goes, the window or
-// overlay closes.
 function TerminalContainer(props: {
   tag: string;
   initialSession: SSHSessionOptions;
@@ -140,9 +123,6 @@ function TerminalContainer(props: {
     }
   }, [props.setWindowTitle, activeTitle]);
 
-  // All sessions gone: close the popup window, or the overlay on mobile.
-  // The empty state below stays as a fallback for when the browser refuses
-  // to close a window it did not open.
   const onCloseRef = useRef(props.onClose);
   onCloseRef.current = props.onClose;
   useEffect(() => {
@@ -188,8 +168,6 @@ function TerminalContainer(props: {
     }
   };
 
-  // Other remembered peers reachable from this endpoint, excluding the peer
-  // of the active session — the candidates for New Session.
   const prefs = loadSSHPrefs();
   const endpoint = tailscale.data.endpoints.find((entry) => entry.endpointTag === props.tag);
   const rememberedPeers = allPeers(endpoint).filter(
@@ -296,9 +274,6 @@ function TerminalSession(props: {
   const terminalRef = useRef<Terminal | null>(null);
   const fitRef = useRef<FitAddon | null>(null);
 
-  // Read t and the callbacks through refs inside the stream callbacks: a
-  // language switch or parent re-render must not re-run the effect, which
-  // would tear down a live SSH session.
   const tRef = useRef(t);
   tRef.current = t;
   const onStatusLineRef = useRef(props.onStatusLine);
@@ -425,8 +400,6 @@ function TerminalSession(props: {
     const titleSubscription = terminal.onTitleChange((title) => {
       onTitleChangeRef.current(title);
     });
-    // Skip fitting while hidden behind another session: xterm cannot measure
-    // a display:none host.
     const resizeObserver = new ResizeObserver(() => {
       if (host.clientWidth > 0 && host.clientHeight > 0) {
         fit.fit();
@@ -446,7 +419,6 @@ function TerminalSession(props: {
     };
   }, [api, props.session]);
 
-  // Refit and refocus when this session becomes the visible one.
   useEffect(() => {
     if (!props.active) {
       return;

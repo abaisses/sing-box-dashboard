@@ -1,29 +1,20 @@
-// Regenerates src/components/iconPaths.ts from @material-design-icons/svg.
-//
-// Icon choices mirror sing-box-for-android (Compose Material Icons): the
-// style key below matches Icons.Default/Filled ("filled") vs Icons.Outlined
-// ("outlined") used there for the same feature.
 import { readFileSync, writeFileSync } from "node:fs";
 
 const ICONS = {
-  // navigation (NavigationDestinations.kt)
   dashboard: "filled",
   text_snippet: "filled",
   folder: "filled",
   swap_vert: "filled",
   terminal: "filled",
   settings: "filled",
-  // dashboard cards
   upload: "outlined",
   download: "outlined",
   cable: "outlined",
   tune: "outlined",
   route: "outlined",
   bug_report: "outlined",
-  // groups
   speed: "filled",
   unfold_more: "filled",
-  // logs
   filter_list: "filled",
   save: "filled",
   share: "filled",
@@ -31,7 +22,6 @@ const ICONS = {
   content_copy: "filled",
   pause: "filled",
   play_arrow: "filled",
-  // tools
   network_check: "outlined",
   swap_horiz: "filled",
   hub: "outlined",
@@ -45,9 +35,7 @@ const ICONS = {
   router: "filled",
   edit: "outlined",
   more_horiz: "filled",
-  // connection error
   cloud_off: "outlined",
-  // chrome
   search: "filled",
   close: "filled",
   check: "filled",
@@ -60,14 +48,11 @@ const ICONS = {
   drag_handle: "filled",
   menu: "filled",
   dns: "filled",
-  // settings about
   description: "outlined",
   code: "outlined",
-  // theme picker
   brightness_auto: "filled",
   light_mode: "filled",
   dark_mode: "filled",
-  // language picker
   language: "filled",
 };
 

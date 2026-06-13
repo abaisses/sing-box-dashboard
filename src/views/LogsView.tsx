@@ -22,8 +22,6 @@ const LEVEL_OPTIONS: { value: LogLevel; label: MessageKey }[] = [
   { value: LogLevel.TRACE, label: "Trace" },
 ];
 
-// The contrast adjustment needs the actual log background; re-resolve it
-// whenever the theme attribute flips.
 function useLogBackground(): Rgb {
   const [background, setBackground] = useState<Rgb>(() => resolveBackground());
   useEffect(() => {
@@ -39,8 +37,6 @@ function resolveBackground(): Rgb {
   return parseCssColor(value) ?? [255, 255, 255];
 }
 
-// Mirrors the macOS client's "logs-yyyy-MM-dd-HH:mm:ss.txt" naming, with dots
-// instead of colons since colons are invalid in filenames on most systems.
 function fileTimestamp(): string {
   const now = new Date();
   return `${now.getFullYear()}-${pad2(now.getMonth() + 1)}-${pad2(now.getDate())}-${pad2(now.getHours())}.${pad2(now.getMinutes())}.${pad2(now.getSeconds())}`;
@@ -50,8 +46,6 @@ export function LogsView() {
   const api = useApi();
   const { t } = useI18n();
   const logs = useStream(api.logs);
-  // Stale entries stay up while the stream silently reconnects; the body
-  // yields to the banner only once the outage is latched.
   const outage = useStreamOutage(logs, isTerminalCode(logs.errorCode));
   const serviceStatus = useStream(api.serviceStatus);
   const [level, setLevel] = useState<LogLevel | null>(null);
@@ -80,8 +74,6 @@ export function LogsView() {
     [filtered],
   );
 
-  // Exports follow the macOS client: the level/search-filtered logs as plain
-  // text (ANSI escapes are useless outside the terminal-styled view).
   const logsText = () => filtered.map((entry) => stripAnsi(entry.message)).join("\n");
   const logFileName = () => `logs-${fileTimestamp()}.txt`;
   const canShare = typeof navigator.share === "function";
@@ -99,7 +91,6 @@ export function LogsView() {
     URL.revokeObjectURL(url);
   };
 
-  // Dismissing the share sheet rejects with AbortError; that is not a failure.
   const onShareError = (error: unknown) => {
     if (error instanceof DOMException && error.name === "AbortError") {
       return;
@@ -225,9 +216,6 @@ const LogLine = memo(function LogLine(props: {
   const segments = parseAnsi(props.message);
   const query = props.highlight.toLowerCase();
 
-  // Highlight ranges are computed over the plain text, then mapped back onto
-  // the styled segments so search keeps the ANSI colors (as the macOS client
-  // does with its attributed-string highlight).
   const ranges: [number, number][] = [];
   if (query !== "") {
     const plain = segments.map((segment) => segment.text).join("");

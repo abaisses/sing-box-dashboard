@@ -2,9 +2,6 @@ import type { IconName } from "../components/Icon";
 import { loadStoredJson, saveStoredJson } from "../lib/storage";
 import type { MessageKey } from "./translations";
 
-// Mirrors DashboardCard / DashboardCardConfiguration from sing-box-for-apple,
-// reduced to the cards the daemon API can back (no NE profile / system proxy).
-
 export type DashboardCardId =
   | "uploadTraffic"
   | "downloadTraffic"
@@ -44,8 +41,6 @@ export function loadDashboardCardsConfig(): DashboardCardsConfig {
   if (parsed) {
     const enabled = (Array.isArray(parsed.enabled) ? parsed.enabled : []).filter(isCardId);
     let order = (Array.isArray(parsed.order) ? parsed.order : []).filter(isCardId);
-    // Cards added in newer versions are appended to a saved order, as the
-    // Apple client does on load.
     order = order.concat(DEFAULT_CARD_ORDER.filter((card) => !order.includes(card)));
     return { enabled, order };
   }
@@ -65,8 +60,6 @@ export function orderedEnabledCards(config: DashboardCardsConfig): DashboardCard
   return config.order.filter((card) => config.enabled.includes(card));
 }
 
-// Mirrors insertInOrder: a re-enabled card returns to its position in the
-// card order rather than the end of the list.
 export function toggleCard(config: DashboardCardsConfig, card: DashboardCardId): DashboardCardsConfig {
   if (config.enabled.includes(card)) {
     return { ...config, enabled: config.enabled.filter((entry) => entry !== card) };

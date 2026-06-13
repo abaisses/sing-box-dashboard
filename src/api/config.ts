@@ -16,8 +16,6 @@ const STORAGE_KEY = "sing-box-dashboard.servers";
 const LEGACY_STORAGE_KEY = "sing-box-dashboard.server";
 
 export function createServerId(): string {
-  // crypto.randomUUID only exists in secure contexts; the dashboard is
-  // commonly served over plain HTTP from a LAN address.
   if (typeof crypto.randomUUID === "function") {
     return crypto.randomUUID();
   }
@@ -91,9 +89,6 @@ export function loadServersState(): ServersState {
 export function saveServersState(state: ServersState) {
   saveStoredJson(STORAGE_KEY, state);
 }
-
-// Server list mutations shared by the Settings sub-page and the
-// connection-error takeover, so the activeId fallback rules stay identical.
 
 export function upsertServer(state: ServersState, server: Server): ServersState {
   const exists = state.servers.some((entry) => entry.id === server.id);

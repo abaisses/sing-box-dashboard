@@ -14,8 +14,6 @@ import {
 
 const CONNECT_TIMEOUT_MS = 8000;
 
-// Probe the server by waiting for the first service-status message; any
-// response (even an auth error) proves more than a generic fetch failure.
 async function testConnection(server: Server, signal: AbortSignal, t: Translate): Promise<void> {
   const api = new DaemonApi(server);
   for await (const _ of api.client.subscribeServiceStatus({}, { signal })) {
@@ -37,9 +35,6 @@ const DIAGNOSIS_MESSAGES: Record<ConnectionDiagnosis, MessageKey> = {
     "The server is unreachable; check that the address is correct and the service is running.",
 };
 
-// Browsers collapse every network-layer failure into one opaque message
-// (see lib/connectivity.ts): show it as-is while a probe narrows the
-// cause, then append the conclusion. Other errors pass through untouched.
 export function useDiagnosedConnectError(
   message: string | null,
   serverUrl: string,
@@ -78,8 +73,6 @@ export function SetupView(props: {
   const [url, setUrl] = useState("");
   const [secret, setSecret] = useState("");
   const [connecting, setConnecting] = useState(false);
-  // The error keeps the URL it came from, so the diagnosis probe targets
-  // the address that actually failed even after the field is edited.
   const [error, setError] = useState<{ message: string; url: string } | null>(null);
   const errorDetail = useDiagnosedConnectError(error?.message ?? null, error?.url ?? "");
   const controllerRef = useRef<AbortController | null>(null);
@@ -105,8 +98,6 @@ export function SetupView(props: {
         url: normalizedUrl,
         secret,
       };
-      // Race a hard timeout so the UI always recovers, even if the transport
-      // swallows the abort signal.
       await Promise.race([
         testConnection(server, controller.signal, t),
         new Promise<never>((_, reject) => {

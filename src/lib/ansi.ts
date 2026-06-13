@@ -29,11 +29,9 @@ const CLIENT_COLORS: Record<string, Rgb> = {
   "37": [237, 240, 242],
 };
 
-// eslint-disable-next-line no-control-regex -- \x1b is the ANSI escape introducer
+// eslint-disable-next-line no-control-regex
 const ANSI_PATTERN = /\x1b\[[;\d]*m/g;
 
-// Mirrors ANSIColors.parseAnsiCode: returns the style this sequence switches
-// to, or null for a reset / unstyled sequence.
 function parseSequence(sequence: string): AnsiStyle | null {
   const codes = sequence.slice(2, -1).split(";").filter((code) => code !== "");
   const style: AnsiStyle = {};
@@ -108,9 +106,6 @@ function contrastRatio(left: Rgb, right: Rgb): number {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-// Mirrors adjustedForContrast(against:minRatio:): binary-search a blend
-// toward black (light backgrounds) or white (dark backgrounds) until the
-// WCAG contrast ratio reaches the minimum.
 function adjustForContrast(color: Rgb, background: Rgb, minRatio = 4.5): Rgb {
   if (contrastRatio(color, background) >= minRatio) {
     return color;

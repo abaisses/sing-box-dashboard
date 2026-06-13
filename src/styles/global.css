@@ -90,12 +90,6 @@
   --shadow-overlay: 0 12px 48px rgba(0, 0, 0, 0.55);
 }
 
-/* Accent palette, selected in Settings (data-accent on <html>, mirrored by
-   the pre-paint script in index.html). Colors are the macOS System Settings
-   accent set; "default" keeps the dashboard's monochrome accent. Rules are
-   unscoped so the picker swatches, which carry data-accent themselves, pick
-   up the same colors (see AccentSelect in ui.tsx); the descendant variant
-   covers swatches on a dark page. */
 [data-accent="default"] {
   --accent: #1a1a1a;
   --accent-strong: #000000;
@@ -138,7 +132,6 @@
   --on-accent: #ffffff;
 }
 
-/* White on yellow is illegible; macOS also flips to dark text here. */
 [data-accent="yellow"] {
   --accent: #ffc600;
   --accent-strong: #cc9e00;
@@ -232,10 +225,6 @@
   --on-accent: #ffffff;
 }
 
-/* Custom accent: a single color picked in the theme dialog. applyAccent()
-   sets --custom-accent (and a luminance-derived --on-accent) inline on
-   <html>; the tones are mixed here so they track theme switches on their
-   own. Mix ratios approximate the preset tables above. */
 [data-accent="custom"] {
   --accent: var(--custom-accent);
   --accent-strong: color-mix(in srgb, var(--custom-accent), #000000 18%);
@@ -258,23 +247,18 @@ body,
   height: 100%;
 }
 
-/* The document never scrolls (the app scrolls in inner containers), so any
-   document overscroll only manifests as pull-to-refresh / rubber-banding /
-   swipe navigation. The inner scrollers carry overscroll-behavior too,
-   because iOS Safari applies it unreliably on the root scroller — blocking
-   the chain at the inner scroller is what actually stops the bounce there. */
+/* iOS Safari applies overscroll-behavior unreliably on the root scroller, so
+   the inner scrollers set it too — blocking the chain there is what actually
+   stops the rubber-banding. */
 html,
 body {
   overscroll-behavior: none;
-  /* Disables double-tap zoom only. Deliberately not the stricter pan-x
-     pan-y, which can break text-field touch interactions (tap-to-focus,
-     IME) on some engines. Pinch-zoom is covered elsewhere: viewport meta
-     (Android) and the gesture-event hack in main.tsx (iOS). */
+  /* Not the stricter pan-x pan-y, which can break text-field touch
+     interactions (tap-to-focus, IME) on some engines. */
   touch-action: manipulation;
 }
 
-/* iOS Safari fills the status bar area with the canvas (html) background;
-   use the topbar surface so both bars read as one piece of chrome. */
+/* iOS Safari fills the status bar area with the canvas (html) background. */
 html {
   background: var(--surface);
 }
@@ -283,9 +267,7 @@ html {
    instead tints its chrome from the background-color of a fixed element
    touching the top edge (≥80% wide, ≥3px tall, within 4px of the edge);
    without one it samples the body color once at load and never again, so
-   theme switches would leave a stale tint. Sits behind the topbar (same
-   surface color), so it is never actually visible. Mobile-only: on the
-   desktop layout a full-width surface strip would cross the content area. */
+   theme switches would leave a stale tint. */
 .statusbar-tint {
   display: none;
 }
@@ -340,14 +322,11 @@ a:hover {
   background: var(--accent-soft);
 }
 
-/* ---------- layout ---------- */
-
 .app {
   display: flex;
   height: 100%;
 }
 
-/* Mobile-only chrome; revealed in the media query at the end of this file. */
 .mobile-topbar,
 .sidebar-scrim {
   display: none;
@@ -445,9 +424,6 @@ a:hover {
   background: var(--danger);
 }
 
-/* ---------- server picker ---------- */
-
-/* Pinned to the foot of the sidebar as a status row; the menu opens upward. */
 .server-picker {
   position: relative;
   margin-top: auto;
@@ -492,8 +468,6 @@ a:hover {
   width: 100%;
 }
 
-/* The dot (8px) and the uptime icon (10px) each sit centered in the 16px
-   slot nav-item icons occupy, keeping both rows on the same columns. */
 .server-picker-line .state-dot {
   margin: 0 4px;
 }
@@ -617,7 +591,6 @@ a:hover {
   position: relative;
 }
 
-/* keep the trigger row highlighted while the pointer is inside the flyout */
 .submenu:hover > .menu-item {
   background: var(--hover);
 }
@@ -647,8 +620,6 @@ a:hover {
 .menu-item.danger:hover {
   background: var(--danger-soft);
 }
-
-/* ---------- content ---------- */
 
 .content {
   flex: 1;
@@ -717,8 +688,6 @@ a:hover {
   color: var(--text);
 }
 
-/* ---------- cards ---------- */
-
 .card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -748,7 +717,6 @@ a:hover {
   gap: 6px;
 }
 
-/* Mirrors the macOS dashboard: half-width cards pair up two per row. */
 .card-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -759,7 +727,6 @@ a:hover {
   grid-column: 1 / -1;
 }
 
-/* Keep two cards per row even on phones; collapse only when truly narrow. */
 @media (max-width: 360px) {
   .card-grid {
     grid-template-columns: 1fr;
@@ -811,8 +778,6 @@ a:hover {
   margin-bottom: 8px;
 }
 
-/* ---------- navigation lists (Tools) ---------- */
-
 .list-section-title {
   font-size: 11px;
   font-weight: 600;
@@ -863,7 +828,6 @@ a:hover {
   flex: 1;
 }
 
-/* Trailing secondary value before the chevron (e.g. the active server name). */
 .nav-row > .nav-row-detail {
   flex: 0 1 auto;
   min-width: 0;
@@ -877,8 +841,6 @@ a:hover {
 .nav-row > .icon:last-child {
   color: var(--text-faint);
 }
-
-/* ---------- controls ---------- */
 
 .button {
   display: inline-flex;
@@ -1098,7 +1060,6 @@ a:hover {
   background-position: left 8px center;
 }
 
-/* Compact variant for inline rows (settings / setup language pickers). */
 .select.inline {
   width: auto;
   min-width: 130px;
@@ -1178,8 +1139,6 @@ a:hover {
   padding-inline-start: 30px;
 }
 
-/* ---------- dashboard card management ---------- */
-
 .card-manage-list {
   display: flex;
   flex-direction: column;
@@ -1209,8 +1168,6 @@ a:hover {
   display: inline-flex;
   color: var(--text-faint);
   cursor: grab;
-  /* The handle drives pointer-event reordering; without this, touch input
-     would scroll the dialog instead of dragging the row. */
   touch-action: none;
 }
 
@@ -1227,11 +1184,6 @@ a:hover {
   font-weight: 500;
 }
 
-/* ---------- settings ---------- */
-
-/* Preferences sub-page: the flat settings rows grouped into a nav-list-style
-   card. No overflow clipping — the Theme row's accent menu must escape the
-   card's bounds. */
 .settings-list {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1261,8 +1213,6 @@ a:hover {
   flex: 1;
 }
 
-/* Preference rows: one shared width for the right-hand controls so the
-   Appearance / Theme / Language controls line up. */
 .settings-row .icon-segmented,
 .settings-row .menu-anchor > .button,
 .settings-row .select.inline {
@@ -1273,7 +1223,6 @@ a:hover {
   flex: 1;
 }
 
-/* Label sits at the start, the unfold chevron hugs the end. */
 .settings-row .menu-anchor > .button {
   justify-content: flex-start;
 }
@@ -1302,8 +1251,6 @@ a:hover {
   color: var(--text-faint);
 }
 
-/* Servers sub-page: nav-list-style card; rows open the edit dialog, the
-   add action lives in the page header. Each row stacks the name over the URL. */
 .server-list {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1329,8 +1276,6 @@ a:hover {
   transition: background var(--transition-fast);
 }
 
-/* Row dividers; must stay after the rows' border reset above — the
-   selectors tie on specificity, so source order decides. */
 .server-item + .server-item {
   border-top: 1px solid var(--border);
 }
@@ -1383,9 +1328,6 @@ a:hover {
   color: var(--accent-strong);
 }
 
-/* macOS-style accent swatches; each button carries data-accent, so the
-   palette rules at the top of this file color it. The active swatch hollows
-   out into a ring, like the System Settings picker. */
 .accent-picker {
   display: inline-flex;
   flex-wrap: wrap;
@@ -1418,10 +1360,6 @@ a:hover {
   box-shadow: inset 0 0 0 5px var(--accent);
 }
 
-/* Custom-color entry: a multicolor swatch like the macOS one, hosting an
-   invisible native color input (the browser picker has its own palette and
-   hex field). Active hollows out by covering the center with the menu
-   surface. */
 .accent-picker .custom {
   position: relative;
   display: inline-flex;
@@ -1456,7 +1394,6 @@ a:hover {
   pointer-events: none;
 }
 
-/* Current-accent dot inside the Theme row trigger button. */
 .accent-dot {
   width: 12px;
   height: 12px;
@@ -1465,12 +1402,9 @@ a:hover {
   flex-shrink: 0;
 }
 
-/* Dropdown panel for the Theme rows in Settings and the setup footer. */
 .menu.accent-menu {
   padding: 12px 13px;
 }
-
-/* ---------- setup ---------- */
 
 .setup {
   min-height: 100%;
@@ -1512,8 +1446,6 @@ a:hover {
   text-transform: uppercase;
 }
 
-/* The card's one primary action: full width, a touch taller than inline
-   controls. */
 .setup-submit {
   width: 100%;
   height: 36px;
@@ -1521,8 +1453,6 @@ a:hover {
   font-size: 13.5px;
 }
 
-/* Preference rows borrowed from Settings; the panel's own border-top stands
-   in for the first divider, and the card edge closes the last row. */
 .setup-footer {
   margin-top: 22px;
   border-top: 1px solid var(--border);
@@ -1532,8 +1462,6 @@ a:hover {
   border-bottom: 0;
   padding-bottom: 0;
 }
-
-/* ---------- connection error ---------- */
 
 .connection-error-header {
   display: flex;
@@ -1623,18 +1551,12 @@ a:hover {
   white-space: nowrap;
 }
 
-/* ---------- connecting / reconnecting ---------- */
-
-/* Shared with the mobile sidebar scrim. */
 @keyframes fade-in {
   from {
     opacity: 0;
   }
 }
 
-/* First connect to a server, before anything has arrived: just the brand
-   and a centered spinner. The delayed fade-in keeps a fast connect from
-   flashing it. */
 .connecting-view {
   min-height: 100%;
   display: flex;
@@ -1659,9 +1581,6 @@ a:hover {
   height: 21px;
 }
 
-/* Floating hint while the reconnect grace period runs (App.tsx); the long
-   fade-in delay keeps it invisible when the outage is over in under a
-   second, e.g. an instant reconnect after returning from the background. */
 .reconnect-pill {
   position: fixed;
   bottom: 18px;
@@ -1680,8 +1599,6 @@ a:hover {
   animation: fade-in var(--transition-medium) both;
   animation-delay: 0.9s;
 }
-
-/* ---------- groups ---------- */
 
 .group-card {
   margin-bottom: 14px;
@@ -1785,8 +1702,6 @@ a:hover {
   background: #fff;
 }
 
-/* ---------- connections ---------- */
-
 .connection-row {
   width: 100%;
   text-align: start;
@@ -1845,8 +1760,6 @@ a:hover {
   text-align: end;
 }
 
-/* ---------- logs ---------- */
-
 .log-view {
   flex: 1;
   min-height: 0;
@@ -1876,13 +1789,6 @@ a:hover {
   color: inherit;
   border-radius: 2px;
 }
-
-/* ---------- drawer / dialog ----------
-
-   Both are native <dialog> elements shown with showModal(): the dim overlay
-   is the ::backdrop, stacking comes from the top layer, and the panel styles
-   apply to the element itself (resetting the UA dialog defaults). The top
-   inset keeps them below the iOS safe area like the old overlays did. */
 
 .drawer {
   inset: env(safe-area-inset-top, 0px) 0 0 0;
@@ -1986,8 +1892,6 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* Always black-on-white regardless of theme so scanners read it reliably;
-   the encoded quiet zone keeps the rounded corners clear of modules. */
 .qr-code {
   display: block;
   width: min(280px, 100%);
@@ -2005,10 +1909,6 @@ a:hover {
   overflow-wrap: anywhere;
 }
 
-/* ---------- terminal ---------- */
-
-/* Mobile counterpart of the desktop popup window: a full-screen layer above
-   everything, including the drawer (60) and topbar (56). */
 .terminal-overlay {
   position: fixed;
   inset: 0;
@@ -2028,21 +1928,14 @@ a:hover {
   padding-top: calc(6px + env(safe-area-inset-top, 0px));
 }
 
-/* Owns a whole popup window: the toolbar keeps its inset, the terminal
-   fills everything below it edge to edge, square corners. The double class
-   keeps it ahead of the mobile .page padding override. */
 .page.terminal-page {
   padding: 0;
 }
 
-/* The popup window never scrolls as a document — only the terminal
-   scrollback inside does. */
 body:has(> #root > .page.terminal-page) {
   overflow: hidden;
 }
 
-/* Same metrics as .mobile-topbar, so the overlay toolbar lines up with the
-   app chrome around it. */
 .terminal-page .page-header {
   margin-bottom: 0;
   gap: 8px;
@@ -2073,8 +1966,6 @@ body:has(> #root > .page.terminal-page) {
   padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
 }
 
-/* Terminal scrollback scrollbar: thin, square-cornered, transparent track —
-   so nothing shows until there is actually something to scroll. */
 .terminal-page .xterm-viewport::-webkit-scrollbar {
   width: 5px;
 }
@@ -2092,16 +1983,12 @@ body:has(> #root > .page.terminal-page) {
   background: rgba(255, 255, 255, 0.38);
 }
 
-/* Firefox has no scrollbar pseudo-elements; its thin native bar also hides
-   the thumb when nothing overflows. */
 @supports not selector(::-webkit-scrollbar) {
   .terminal-page .xterm-viewport {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
   }
 }
-
-/* ---------- misc ---------- */
 
 .empty-state {
   text-align: center;
@@ -2170,7 +2057,6 @@ body:has(> #root > .page.terminal-page) {
   color: var(--text-faint);
 }
 
-/* Technical values (versions, rates, URLs, logs) keep LTR ordering in RTL. */
 [dir="rtl"] :is(.sidebar-brand-version, .metric, .metric-sub, .data-line .value,
     .server-row-url, .connection-error-url, .peer-address, .log-view, .connection-row,
     .copy-value, .server-uptime) {
@@ -2178,7 +2064,6 @@ body:has(> #root > .page.terminal-page) {
   unicode-bidi: isolate;
 }
 
-/* Directional glyphs (back arrow, chevrons) point the other way in RTL. */
 [dir="rtl"] .back-button > .icon,
 [dir="rtl"] .settings-row-chevron .icon,
 [dir="rtl"] .nav-row > .icon:last-child,
@@ -2206,7 +2091,6 @@ body:has(> #root > .page.terminal-page) {
   justify-content: flex-end;
 }
 
-/* Footer button row of a dialog, below the message or form fields. */
 .row-actions.dialog-actions {
   margin-top: 14px;
 }
@@ -2249,9 +2133,6 @@ body:has(> #root > .page.terminal-page) {
   gap: 5px;
 }
 
-/* ---------- tailscale ---------- */
-
-/* Rows inside the Status card (State / This device / Exit node). */
 .nav-line {
   display: flex;
   align-items: center;
@@ -2312,9 +2193,6 @@ a.nav-line {
   transform: scaleX(-1);
 }
 
-/* Peer list sections: nav-list look, with a per-row overflow menu. The
-   wrapper keeps overflow visible so the menu can escape the card bounds;
-   edge rows round their hover background instead. */
 .peer-list {
   background: var(--card);
   border: 1px solid var(--border);
@@ -2387,8 +2265,6 @@ a.nav-line {
   height: 26px;
 }
 
-/* ---------- mobile ---------- */
-
 @media (max-width: 720px) {
   :root {
     --control-height: 36px;
@@ -2406,9 +2282,9 @@ a.nav-line {
     padding: calc(6px + env(safe-area-inset-top)) 10px 6px;
     border-bottom: 1px solid var(--border);
     background: var(--surface);
-    /* Above the drawer scrim (55), below the drawer (60): iOS tints the
-       status bar from the page's top pixels, so the topbar must stay
-       undimmed while the drawer is open. Also keeps the ✕ button tappable. */
+    /* iOS tints the status bar from the page's top pixels, so the topbar
+       must stay undimmed (above the scrim, below the drawer) while the
+       drawer is open. */
     position: relative;
     z-index: 56;
   }
@@ -2462,7 +2338,6 @@ a.nav-line {
     background: rgba(0, 0, 0, 0.32);
   }
 
-  /* Larger touch targets for the in-drawer navigation. */
   .nav-item {
     padding: 10px;
     font-size: 14.5px;
@@ -2509,8 +2384,6 @@ a.nav-line {
     gap: 10px;
   }
 
-  /* The fixed-height fallback accounts for the topbar; dvh tracks the
-     collapsing browser chrome on mobile. */
   .page:not(.page-full) .log-view {
     height: calc(100dvh - 230px);
   }

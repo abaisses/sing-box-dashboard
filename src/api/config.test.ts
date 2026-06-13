@@ -69,7 +69,6 @@ describe("loadServersState", () => {
     const state = loadServersState();
     expect(state.servers.map((server) => server.id)).toEqual(["a"]);
     expect(state.activeId).toBe("a");
-    // Missing optional fields are normalized to empty strings.
     expect(state.servers[0]).toEqual({ id: "a", name: "", secret: "", url: "http://10.0.0.1:9090" });
   });
 
@@ -81,7 +80,6 @@ describe("loadServersState", () => {
     expect(state.servers[0].secret).toBe("s");
     expect(state.activeId).toBe(state.servers[0].id);
     expect(localStorage.getItem(LEGACY_STORAGE_KEY)).toBeNull();
-    // The migration is persisted under the new key.
     expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull();
   });
 });

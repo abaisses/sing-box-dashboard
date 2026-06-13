@@ -14,7 +14,6 @@ import { LanguageSelect, useI18n } from "../app/i18n";
 import { Icon } from "../components/Icon";
 import { Dialog, Field, NavRow, ThemeMenu, ThemeSelect } from "../components/ui";
 
-// Top-level Settings page: a menu of sub-pages, like the Tools page.
 export function SettingsView(props: { serversState: ServersState }) {
   const { t } = useI18n();
   const { servers, activeId } = props.serversState;
@@ -72,7 +71,6 @@ function SettingsPageHeader(props: { title: string; action?: ReactNode }) {
   );
 }
 
-// Settings → Preferences sub-page: the appearance / theme / language rows.
 export function PreferencesView(props: {
   theme: ThemePreference;
   onThemeChange: (theme: ThemePreference) => void;
@@ -101,8 +99,6 @@ export function PreferencesView(props: {
   );
 }
 
-// Settings → Servers sub-page: pure management — rows open the edit
-// dialog; switching the active server stays with the sidebar picker.
 export function ServersView(props: {
   serversState: ServersState;
   onServersChange: (state: ServersState) => void;

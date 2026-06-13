@@ -95,8 +95,6 @@ export function ConnectionsView() {
     </DetailShell>
   );
 
-  // On mobile the detail replaces the list as a pushed sub-page, like the
-  // Tools sub-pages; on desktop it stays a side drawer over the list.
   if (isMobile && detail) {
     return detail;
   }

@@ -3,10 +3,8 @@ import { create, fromBinary, toBinary } from "@bufbuild/protobuf";
 
 import type { Server } from "./config";
 
-// Bidirectional gRPC streaming over WebSocket, speaking the
-// improbable-eng/grpc-web "grpc-websockets" subprotocol the sing-box API
-// service accepts. Browsers cannot carry bidirectional streams over fetch,
-// so methods like the Tailscale SSH session use this transport instead.
+// Bidirectional gRPC streaming over the improbable-eng/grpc-web
+// "grpc-websockets" subprotocol the sing-box API service accepts.
 
 export interface GrpcStatus {
   code: number;
@@ -158,8 +156,7 @@ export class GrpcWebSocketStream<Req extends DescMessage, Res extends DescMessag
     try {
       message = decodeURIComponent(message);
     } catch {
-      // A malformed percent-encoding keeps the raw value; throwing here would
-      // leave the stream hanging without an end notification.
+      // ignore
     }
     this.status = { code, message };
     this.end(this.status);

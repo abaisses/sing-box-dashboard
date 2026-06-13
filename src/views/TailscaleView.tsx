@@ -63,11 +63,6 @@ export function TailscaleEndpointView(props: { tag: string }) {
       ? endpoint?.self
       : peers.find((peer) => peer.stableID === peerDetail);
 
-  // On desktop SSH opens a dedicated popup browser window, mirroring
-  // openWindow on macOS; the session is encoded in the URL so the window is
-  // self-contained. If the popup is blocked, fall back to navigating the
-  // current tab. On mobile it presents as a full-screen overlay instead,
-  // like the full-screen terminal sheet on iOS.
   const openSSHSession = (peer: TailscalePeer, username: string, terminalType: string) => {
     if (isMobile) {
       setMobileSSH(buildSSHSession(props.tag, peer, username, terminalType));
@@ -83,8 +78,6 @@ export function TailscaleEndpointView(props: { tag: string }) {
     }
   };
 
-  // Remembered peers connect immediately; everything else goes through the
-  // prompt first, mirroring the quick-connect context menu on Apple platforms.
   const connectSSH = (peer: TailscalePeer) => {
     const prefs = loadSSHPrefs()[peer.stableID];
     if (prefs?.remember) {
@@ -132,8 +125,6 @@ export function TailscaleEndpointView(props: { tag: string }) {
     </>
   );
 
-  // On mobile the peer detail replaces the endpoint page as a pushed
-  // sub-page, like the Tools sub-pages; on desktop it stays a side drawer.
   const detail = endpoint && detailPeer && (
     <DetailShell
       backLabel="Tailscale"
@@ -278,9 +269,6 @@ function StatusCard(props: {
   );
 }
 
-// Rows inside the Status card, mirroring the State/This Device/Exit Node/auth
-// ListItems in sing-box-for-android (PowerSettingsNew/Computer/Router/
-// OpenInNew/QrCode2 icons).
 function NavLine(props: { icon: IconName; label: string; value: string; onClick: () => void }) {
   return (
     <button className="nav-line" onClick={props.onClick}>

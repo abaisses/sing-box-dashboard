@@ -64,7 +64,6 @@ describe("StreamStore", () => {
     expect(store.getSnapshot().phase).toBe("error");
     expect(store.getSnapshot().error).toBe("boom");
 
-    // First retry comes after 1 s, the second one 2 s later.
     await vi.advanceTimersByTimeAsync(1000);
     expect(calls).toBe(2);
     await vi.advanceTimersByTimeAsync(1999);
@@ -125,7 +124,6 @@ describe("StreamStore", () => {
     );
     const unsubscribe = store.subscribe(() => {});
 
-    // Let three attempts fail so the loop sits in a 3 s backoff.
     await vi.advanceTimersByTimeAsync(0);
     await vi.advanceTimersByTimeAsync(1000);
     await vi.advanceTimersByTimeAsync(2000);
@@ -135,7 +133,6 @@ describe("StreamStore", () => {
     await vi.advanceTimersByTimeAsync(0);
     expect(calls).toBe(4);
 
-    // The attempt counter restarted: the next retry comes after 1 s again.
     await vi.advanceTimersByTimeAsync(999);
     expect(calls).toBe(4);
     await vi.advanceTimersByTimeAsync(1);
@@ -158,9 +155,6 @@ describe("StreamStore", () => {
     const unsubscribe = store.subscribe(() => {});
     expect(calls).toBe(1);
 
-    // A page resumed from the background: the visibility kick fires before
-    // the killed stream reports its error, and must still make the
-    // reconnect immediate.
     store.retryNow();
     rejectCurrent(new Error("connection lost"));
     await vi.advanceTimersByTimeAsync(0);
@@ -183,7 +177,6 @@ describe("StreamStore", () => {
 
     await vi.advanceTimersByTimeAsync(1000);
     expect(calls).toBe(2);
-    // Without resetOnReconnect this would be [1, 2].
     expect(store.getSnapshot().data).toEqual([2]);
     unsubscribe();
   });

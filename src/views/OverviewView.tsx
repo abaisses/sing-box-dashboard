@@ -162,8 +162,6 @@ function OverviewCards(props: { config: DashboardCardsConfig }) {
   return <div className="card-grid">{orderedEnabledCards(props.config).map(renderCard)}</div>;
 }
 
-// Mirrors CardManagementSheet: all cards in their configured order, each with
-// a drag handle and a visibility toggle, plus Reset and Done.
 function CardManagementDialog(props: {
   config: DashboardCardsConfig;
   onChange: (config: DashboardCardsConfig) => void;
@@ -173,9 +171,6 @@ function CardManagementDialog(props: {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Reordering uses pointer events rather than HTML5 drag-and-drop, which
-  // mobile browsers do not deliver from touch input: the handle captures the
-  // pointer, and whichever row the pointer is over becomes the new position.
   const moveDrag = (event: React.PointerEvent<HTMLElement>) => {
     if (dragIndex === null || !listRef.current) {
       return;
