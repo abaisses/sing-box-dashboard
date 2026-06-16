@@ -329,10 +329,6 @@ export class DaemonApi {
     return response.warnings;
   }
 
-  async triggerOOMReport(): Promise<void> {
-    await this.client.triggerOOMReport({});
-  }
-
   async setTailscaleExitNode(endpointTag: string, stableID: string): Promise<void> {
     await this.client.setTailscaleExitNode({ endpointTag, stableID });
   }
