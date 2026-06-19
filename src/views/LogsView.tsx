@@ -1,5 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
+import type { LogEntry } from "../api/daemon";
 import { pad2 } from "../api/format";
 import { isTerminalCode, useStream } from "../api/stream";
 import { useApi } from "../app/context";
@@ -51,6 +52,7 @@ export function LogsView() {
   const serviceStatus = useStream(api.serviceStatus);
   const [level, setLevel] = useState<LogLevel | null>(null);
   const [paused, setPaused] = useState(false);
+  const [frozen, setFrozen] = useState<LogEntry[]>([]);
   const [search, setSearch] = useState("");
   const viewRef = useRef<HTMLDivElement>(null);
   const background = useLogBackground();
@@ -58,14 +60,25 @@ export function LogsView() {
   const started = serviceStatus.data.status?.status === ServiceStatus_Type.STARTED;
   const effectiveLevel = level ?? logs.data.defaultLevel ?? LogLevel.INFO;
 
+  const togglePause = () => {
+    if (paused) {
+      setPaused(false);
+    } else {
+      setFrozen(logs.data.entries);
+      setPaused(true);
+    }
+  };
+
+  const sourceEntries = paused ? frozen : logs.data.entries;
+
   const filtered = useMemo(() => {
-    let entries = logs.data.entries.filter((entry) => entry.level <= effectiveLevel);
+    let entries = sourceEntries.filter((entry) => entry.level <= effectiveLevel);
     const query = search.trim().toLowerCase();
     if (query !== "") {
       entries = entries.filter((entry) => stripAnsi(entry.message).toLowerCase().includes(query));
     }
     return entries;
-  }, [logs.data.entries, effectiveLevel, search]);
+  }, [sourceEntries, effectiveLevel, search]);
 
   const visible = useMemo(
     () =>
@@ -120,7 +133,7 @@ export function LogsView() {
   }, [visible, paused]);
 
   let body: ReactNode;
-  if (logs.data.entries.length > 0 && outage === null) {
+  if (sourceEntries.length > 0 && outage === null) {
     body = (
       <div className={styles.logView} ref={viewRef}>
         {visible.map((entry) => (
@@ -155,7 +168,7 @@ export function LogsView() {
           <IconButton
             active={paused}
             title={paused ? t("Resume scrolling") : t("Pause scrolling")}
-            onClick={() => setPaused(!paused)}
+            onClick={togglePause}
           >
             <Icon name={paused ? "play_arrow" : "pause"} />
           </IconButton>
